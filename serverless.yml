@@ -1,0 +1,28 @@
+service: pasarela_pagos
+provider:
+  name: aws
+  runtime: nodejs12.x
+  ## TODO credenciales y datos sensibles consultarlo desde un SSM
+  environment:
+    URL_REDIS: redis://localhost:6379
+    SECRET_KEY: vVsdNWICcxs1lwzf
+# you can overwrite defaults here
+#  stage: dev
+#  region: us-east-1
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+functions:
+  generarToken:
+    handler: src/handler.generarTokenController
+    events:
+      - http:
+          path: tokens
+          method: post
+  obtenerDatosTarjeta:
+    handler: src/handler.obtenerDatosTarjetaController
+    events:
+      - http:
+          path: tarjeta
+          method: get
